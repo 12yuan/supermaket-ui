@@ -55,7 +55,7 @@ export default new Vuex.Store({
     user,
     tagsView,
     settings,
-    permission
+    permission,
   },
   plugins: [vuexLocal.plugin],
 });

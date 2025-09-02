@@ -9,7 +9,7 @@ export function getAddressList(params) {
   return request({
     url: '/addresses',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -21,7 +21,7 @@ export function getAddressList(params) {
 export function getAddressDetail(id) {
   return request({
     url: `/addresses/${id}`,
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -34,7 +34,7 @@ export function createAddress(data) {
   return request({
     url: '/addresses',
     method: 'post',
-    data
+    data,
   });
 }
 
@@ -48,7 +48,7 @@ export function updateAddress(id, data) {
   return request({
     url: `/addresses/${id}`,
     method: 'put',
-    data
+    data,
   });
 }
 
@@ -60,7 +60,7 @@ export function updateAddress(id, data) {
 export function deleteAddress(id) {
   return request({
     url: `/addresses/${id}`,
-    method: 'delete'
+    method: 'delete',
   });
 }
 
@@ -72,7 +72,7 @@ export function deleteAddress(id) {
 export function setDefaultAddress(id) {
   return request({
     url: `/addresses/${id}/default`,
-    method: 'patch'
+    method: 'patch',
   });
 }
 
@@ -83,7 +83,7 @@ export function setDefaultAddress(id) {
 export function getRegionData() {
   return request({
     url: '/regions',
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -94,9 +94,9 @@ export function getRegionData() {
  */
 export function getCitiesByProvince(province) {
   return request({
-    url: `/regions/cities`,
+    url: '/regions/cities',
     method: 'get',
-    params: { province }
+    params: { province },
   });
 }
 
@@ -108,8 +108,8 @@ export function getCitiesByProvince(province) {
  */
 export function getDistrictsByCity(province, city) {
   return request({
-    url: `/regions/districts`,
+    url: '/regions/districts',
     method: 'get',
-    params: { province, city }
+    params: { province, city },
   });
 }

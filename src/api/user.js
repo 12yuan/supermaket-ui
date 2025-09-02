@@ -9,7 +9,7 @@ export function getUserList(params) {
   return request({
     url: '/users',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -21,7 +21,7 @@ export function getUserList(params) {
 export function getUserDetail(id) {
   return request({
     url: `/users/${id}`,
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -34,7 +34,7 @@ export function createUser(data) {
   return request({
     url: '/users',
     method: 'post',
-    data
+    data,
   });
 }
 
@@ -48,7 +48,7 @@ export function updateUser(id, data) {
   return request({
     url: `/users/${id}`,
     method: 'put',
-    data
+    data,
   });
 }
 
@@ -60,7 +60,7 @@ export function updateUser(id, data) {
 export function deleteUser(id) {
   return request({
     url: `/users/${id}`,
-    method: 'delete'
+    method: 'delete',
   });
 }
 
@@ -75,7 +75,7 @@ export function updateUserStatus(id, data) {
   return request({
     url: `/users/${id}/status`,
     method: 'patch',
-    data
+    data,
   });
 }
 
@@ -90,7 +90,7 @@ export function updateUserRoles(id, data) {
   return request({
     url: `/users/${id}/roles`,
     method: 'put',
-    data
+    data,
   });
 }
 
@@ -103,7 +103,7 @@ export function getRoleList(params) {
   return request({
     url: '/roles',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -115,7 +115,7 @@ export function getRoleList(params) {
 export function getRoleDetail(id) {
   return request({
     url: `/roles/${id}`,
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -128,7 +128,7 @@ export function createRole(data) {
   return request({
     url: '/roles',
     method: 'post',
-    data
+    data,
   });
 }
 
@@ -142,7 +142,7 @@ export function updateRole(id, data) {
   return request({
     url: `/roles/${id}`,
     method: 'put',
-    data
+    data,
   });
 }
 
@@ -154,7 +154,7 @@ export function updateRole(id, data) {
 export function deleteRole(id) {
   return request({
     url: `/roles/${id}`,
-    method: 'delete'
+    method: 'delete',
   });
 }
 
@@ -165,7 +165,7 @@ export function deleteRole(id) {
 export function getPermissionList() {
   return request({
     url: '/permissions',
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -180,7 +180,7 @@ export function uploadAvatar(data) {
     method: 'post',
     data,
     headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+      'Content-Type': 'multipart/form-data',
+    },
   });
 }

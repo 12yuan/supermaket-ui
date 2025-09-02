@@ -11,7 +11,7 @@ export function login(data) {
   return request({
     url: '/auth/login',
     method: 'post',
-    data
+    data,
   });
 }
 
@@ -24,7 +24,7 @@ export function register(data) {
   return request({
     url: '/auth/register',
     method: 'post',
-    data
+    data,
   });
 }
 
@@ -35,7 +35,7 @@ export function register(data) {
 export function getUserInfo() {
   return request({
     url: '/auth/user-info',
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -46,7 +46,7 @@ export function getUserInfo() {
 export function logout() {
   return request({
     url: '/auth/logout',
-    method: 'post'
+    method: 'post',
   });
 }
 
@@ -60,7 +60,7 @@ export function refreshToken(data) {
   return request({
     url: '/auth/refresh-token',
     method: 'post',
-    data
+    data,
   });
 }
 
@@ -75,7 +75,7 @@ export function changePassword(data) {
   return request({
     url: '/auth/change-password',
     method: 'post',
-    data
+    data,
   });
 }
 
@@ -89,7 +89,7 @@ export function forgotPassword(data) {
   return request({
     url: '/auth/forgot-password',
     method: 'post',
-    data
+    data,
   });
 }
 
@@ -104,6 +104,6 @@ export function resetPassword(data) {
   return request({
     url: '/auth/reset-password',
     method: 'post',
-    data
+    data,
   });
 }

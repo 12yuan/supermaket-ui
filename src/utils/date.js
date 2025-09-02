@@ -10,19 +10,19 @@
  */
 export function formatDate(date, fmt = 'yyyy-MM-dd hh:mm:ss') {
   if (!date) return '';
-  
+
   // 如果是时间戳（数字），转为日期对象
   if (typeof date === 'number') {
     date = new Date(date);
   }
-  
+
   // 如果是字符串，尝试转为日期对象
   if (typeof date === 'string') {
     date = new Date(date.replace(/-/g, '/'));
   }
-  
+
   if (!(date instanceof Date)) return '';
-  
+
   const o = {
     'M+': date.getMonth() + 1, // 月份
     'd+': date.getDate(), // 日
@@ -30,22 +30,22 @@ export function formatDate(date, fmt = 'yyyy-MM-dd hh:mm:ss') {
     'm+': date.getMinutes(), // 分
     's+': date.getSeconds(), // 秒
     'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
-    'S': date.getMilliseconds() // 毫秒
+    S: date.getMilliseconds(), // 毫秒
   };
-  
+
   if (/(y+)/.test(fmt)) {
-    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+    fmt = fmt.replace(RegExp.$1, (`${date.getFullYear()}`).substr(4 - RegExp.$1.length));
   }
-  
+
   for (const k in o) {
-    if (new RegExp('(' + k + ')').test(fmt)) {
+    if (new RegExp(`(${k})`).test(fmt)) {
       fmt = fmt.replace(
         RegExp.$1,
-        RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length)
+        RegExp.$1.length === 1 ? o[k] : (`00${o[k]}`).substr((`${o[k]}`).length),
       );
     }
   }
-  
+
   return fmt;
 }
 
@@ -56,45 +56,44 @@ export function formatDate(date, fmt = 'yyyy-MM-dd hh:mm:ss') {
  */
 export function getRelativeTime(date) {
   if (!date) return '';
-  
+
   // 如果是字符串，尝试转为日期对象
   if (typeof date === 'string') {
     date = new Date(date.replace(/-/g, '/'));
   }
-  
+
   // 如果是时间戳（数字），转为日期对象
   if (typeof date === 'number') {
     date = new Date(date);
   }
-  
+
   if (!(date instanceof Date)) return '';
-  
+
   const now = new Date();
   const diff = now.getTime() - date.getTime(); // 时间差（毫秒）
-  
+
   if (diff < 0) {
     return formatDate(date);
   }
-  
+
   const minute = 1000 * 60;
   const hour = minute * 60;
   const day = hour * 24;
   const month = day * 30;
   const year = month * 12;
-  
+
   if (diff < minute) {
     return '刚刚';
-  } else if (diff < hour) {
-    return Math.floor(diff / minute) + '分钟前';
-  } else if (diff < day) {
-    return Math.floor(diff / hour) + '小时前';
-  } else if (diff < month) {
-    return Math.floor(diff / day) + '天前';
-  } else if (diff < year) {
-    return Math.floor(diff / month) + '个月前';
-  } else {
-    return Math.floor(diff / year) + '年前';
+  } if (diff < hour) {
+    return `${Math.floor(diff / minute)}分钟前`;
+  } if (diff < day) {
+    return `${Math.floor(diff / hour)}小时前`;
+  } if (diff < month) {
+    return `${Math.floor(diff / day)}天前`;
+  } if (diff < year) {
+    return `${Math.floor(diff / month)}个月前`;
   }
+  return `${Math.floor(diff / year)}年前`;
 }
 
 /**
@@ -106,7 +105,7 @@ export function getDateRange(type) {
   const now = new Date();
   const start = new Date();
   const end = new Date();
-  
+
   switch (type) {
     case 'today':
       start.setHours(0, 0, 0, 0);
@@ -141,7 +140,7 @@ export function getDateRange(type) {
     default:
       break;
   }
-  
+
   return [start, end];
 }
 
@@ -165,11 +164,11 @@ export function getDaysBetween(startDate, endDate) {
   if (typeof endDate === 'number') {
     endDate = new Date(endDate);
   }
-  
+
   // 重置时间部分，只保留日期
   startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
   endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-  
+
   // 计算差值
   const diff = endDate.getTime() - startDate.getTime();
   return Math.round(diff / (1000 * 60 * 60 * 24));

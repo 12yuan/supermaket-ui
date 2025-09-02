@@ -1,4 +1,4 @@
-import store from '@/store'
+import store from '@/store';
 
 /**
  * 角色指令
@@ -6,21 +6,19 @@ import store from '@/store'
  */
 export default {
   inserted(el, binding) {
-    const { value } = binding
-    const roles = store.getters && store.getters['auth/roles']
+    const { value } = binding;
+    const roles = store.getters && store.getters['auth/roles'];
 
     if (value && value instanceof Array && value.length > 0) {
-      const roleValues = value
+      const roleValues = value;
 
-      const hasRole = roles.some(role => {
-        return roleValues.includes(role)
-      })
+      const hasRole = roles.some((role) => roleValues.includes(role));
 
       if (!hasRole) {
-        el.parentNode && el.parentNode.removeChild(el)
+        el.parentNode && el.parentNode.removeChild(el);
       }
     } else {
-      throw new Error(`需要角色！例如 v-role="['admin','editor']"`);
+      throw new Error('需要角色！例如 v-role="[\'admin\',\'editor\']"');
     }
-  }
-}
+  },
+};

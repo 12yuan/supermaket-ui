@@ -9,7 +9,7 @@ export function getInventoryList(params) {
   return request({
     url: '/inventory',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -21,7 +21,7 @@ export function getInventoryList(params) {
 export function getInventoryDetail(id) {
   return request({
     url: `/inventory/${id}`,
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -37,7 +37,7 @@ export function updateInventoryQuantity(id, data) {
   return request({
     url: `/inventory/${id}/quantity`,
     method: 'patch',
-    data
+    data,
   });
 }
 
@@ -50,7 +50,7 @@ export function batchUpdateInventory(data) {
   return request({
     url: '/inventory/batch-update',
     method: 'post',
-    data
+    data,
   });
 }
 
@@ -63,7 +63,7 @@ export function getInventoryHistory(params) {
   return request({
     url: '/inventory/history',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -77,7 +77,7 @@ export function getProductInventoryHistory(productId, params) {
   return request({
     url: `/inventory/history/product/${productId}`,
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -90,7 +90,7 @@ export function getLowStockProducts(params) {
   return request({
     url: '/inventory/low-stock',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -105,8 +105,8 @@ export function importInventory(data) {
     method: 'post',
     data,
     headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+      'Content-Type': 'multipart/form-data',
+    },
   });
 }
 
@@ -120,7 +120,7 @@ export function exportInventory(params) {
     url: '/inventory/export',
     method: 'get',
     params,
-    responseType: 'blob'
+    responseType: 'blob',
   });
 }
 
@@ -133,7 +133,7 @@ export function checkInventory(data) {
   return request({
     url: '/inventory/check',
     method: 'post',
-    data
+    data,
   });
 }
 
@@ -146,7 +146,7 @@ export function getInventoryCheckRecords(params) {
   return request({
     url: '/inventory/check-records',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -158,7 +158,7 @@ export function getInventoryCheckRecords(params) {
 export function getInventoryCheckDetail(id) {
   return request({
     url: `/inventory/check-records/${id}`,
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -171,7 +171,7 @@ export function getInventoryCheckDetails(params) {
   return request({
     url: '/inventory/check-details',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -184,7 +184,7 @@ export function updateInventoryCheckDetail(data) {
   return request({
     url: '/inventory/check-details',
     method: 'put',
-    data
+    data,
   });
 }
 
@@ -196,7 +196,7 @@ export function updateInventoryCheckDetail(data) {
 export function submitInventoryCheck(id) {
   return request({
     url: `/inventory/check-records/${id}/submit`,
-    method: 'post'
+    method: 'post',
   });
 }
 
@@ -210,6 +210,6 @@ export function exportInventoryHistory(params) {
     url: '/inventory/history/export',
     method: 'get',
     params,
-    responseType: 'blob'
+    responseType: 'blob',
   });
 }

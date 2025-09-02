@@ -3,19 +3,19 @@ import { filterAccessibleRoutes } from '@/utils/permission';
 
 const state = {
   routes: [],
-  addRoutes: []
+  addRoutes: [],
 };
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes;
     state.routes = constantRoutes.concat(routes);
-  }
+  },
 };
 
 const actions = {
   generateRoutes({ commit }, roles) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       let accessedRoutes;
       if (roles.includes('admin')) {
         // 管理员可以访问所有路由
@@ -27,12 +27,12 @@ const actions = {
       commit('SET_ROUTES', accessedRoutes);
       resolve(accessedRoutes);
     });
-  }
+  },
 };
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
+  actions,
 };

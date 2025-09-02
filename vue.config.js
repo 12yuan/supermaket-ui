@@ -15,24 +15,24 @@ module.exports = {
     open: true,
     overlay: {
       warnings: false,
-      errors: true
+      errors: true,
     },
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
-        }
-      }
-    }
+          '^/api': '',
+        },
+      },
+    },
   },
   configureWebpack: {
     resolve: {
       alias: {
-        '@': resolve('src')
-      }
-    }
+        '@': resolve('src'),
+      },
+    },
   },
   chainWebpack(config) {
     // 设置 svg-sprite-loader
@@ -48,7 +48,7 @@ module.exports = {
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
       .options({
-        symbolId: 'icon-[name]'
+        symbolId: 'icon-[name]',
       })
       .end();
 
@@ -57,7 +57,7 @@ module.exports = {
       .rule('vue')
       .use('vue-loader')
       .loader('vue-loader')
-      .tap(options => {
+      .tap((options) => {
         options.compilerOptions.preserveWhitespace = true;
         return options;
       })
@@ -66,18 +66,17 @@ module.exports = {
     // 设置开发环境 source map
     config
       .when(process.env.NODE_ENV === 'development',
-        config => config.devtool('cheap-source-map')
-      );
+        (config) => config.devtool('cheap-source-map'));
 
     // 设置生产环境优化
     config
       .when(process.env.NODE_ENV !== 'development',
-        config => {
+        (config) => {
           config
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-              inline: /runtime\..*\.js$/
+              inline: /runtime\..*\.js$/,
             }])
             .end();
           config
@@ -88,24 +87,23 @@ module.exports = {
                   name: 'chunk-libs',
                   test: /[\\/]node_modules[\\/]/,
                   priority: 10,
-                  chunks: 'initial'
+                  chunks: 'initial',
                 },
                 elementUI: {
                   name: 'chunk-elementUI',
                   priority: 20,
-                  test: /[\\/]node_modules[\\/]_?element-ui(.*)/
+                  test: /[\\/]node_modules[\\/]_?element-ui(.*)/,
                 },
                 commons: {
                   name: 'chunk-commons',
                   test: resolve('src/components'),
                   minChunks: 3,
                   priority: 5,
-                  reuseExistingChunk: true
-                }
-              }
+                  reuseExistingChunk: true,
+                },
+              },
             });
           config.optimization.runtimeChunk('single');
-        }
-      );
-  }
+        });
+  },
 };

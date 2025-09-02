@@ -48,7 +48,9 @@ const mutations = {
 
 const actions = {
   // 获取商品列表
-  async fetchProducts({ commit, state }, { page = 1, limit = 10, search = '', category = '' } = {}) {
+  async fetchProducts({ commit, state }, {
+    page = 1, limit = 10, search = '', category = '',
+  } = {}) {
     commit('SET_LOADING', true);
     try {
       const response = await axios.get('/api/products', {
@@ -59,7 +61,7 @@ const actions = {
           category,
         },
       });
-      
+
       commit('SET_PRODUCTS', response.data.items);
       commit('SET_PAGINATION', {
         total: response.data.total,
@@ -74,7 +76,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 获取单个商品详情
   async fetchProduct({ commit }, productId) {
     commit('SET_LOADING', true);
@@ -89,7 +91,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 获取商品分类
   async fetchCategories({ commit }) {
     commit('SET_LOADING', true);
@@ -104,7 +106,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 创建商品
   async createProduct({ commit }, productData) {
     commit('SET_LOADING', true);
@@ -119,7 +121,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 更新商品
   async updateProduct({ commit }, { id, data }) {
     commit('SET_LOADING', true);
@@ -134,7 +136,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 删除商品
   async deleteProduct({ commit }, productId) {
     commit('SET_LOADING', true);
@@ -149,7 +151,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 更新商品状态（上架/下架）
   async updateProductStatus({ commit }, { id, status }) {
     commit('SET_LOADING', true);

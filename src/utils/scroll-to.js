@@ -1,4 +1,4 @@
-Math.easeInOutQuad = function(t, b, c, d) {
+Math.easeInOutQuad = function (t, b, c, d) {
   t /= d / 2;
   if (t < 1) {
     return c / 2 * t * t + b;
@@ -8,9 +8,9 @@ Math.easeInOutQuad = function(t, b, c, d) {
 };
 
 // requestAnimationFrame for Smart Animating http://goo.gl/sx5sts
-var requestAnimFrame = (function() {
-  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(callback) { window.setTimeout(callback, 1000 / 60); };
-})();
+const requestAnimFrame = (function () {
+  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) { window.setTimeout(callback, 1000 / 60); };
+}());
 
 /**
  * 平滑滚动到指定位置
@@ -26,7 +26,7 @@ export function scrollTo(to, duration, callback) {
   let animating = true;
   let lastPos = null;
 
-  const animateScroll = function() {
+  const animateScroll = function () {
     if (!animating) return;
     requestAnimFrame(animateScroll);
     const now = performance.now();

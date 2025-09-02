@@ -38,7 +38,9 @@ const mutations = {
 
 const actions = {
   // 获取库存列表
-  async fetchInventory({ commit }, { page = 1, limit = 10, search = '', lowStock = false } = {}) {
+  async fetchInventory({ commit }, {
+    page = 1, limit = 10, search = '', lowStock = false,
+  } = {}) {
     commit('SET_LOADING', true);
     try {
       const response = await axios.get('/api/inventory', {
@@ -49,7 +51,7 @@ const actions = {
           lowStock,
         },
       });
-      
+
       commit('SET_INVENTORY_ITEMS', response.data.items);
       commit('SET_PAGINATION', {
         total: response.data.total,
@@ -64,7 +66,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 获取单个库存项详情
   async fetchInventoryItem({ commit }, itemId) {
     commit('SET_LOADING', true);
@@ -79,7 +81,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 更新库存数量
   async updateInventoryQuantity({ commit }, { id, quantity, reason }) {
     commit('SET_LOADING', true);
@@ -94,7 +96,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 库存盘点
   async performInventoryCheck({ commit }, { id, actualQuantity, notes }) {
     commit('SET_LOADING', true);
@@ -109,7 +111,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 获取库存预警列表
   async fetchLowStockItems({ commit }) {
     commit('SET_LOADING', true);
@@ -123,7 +125,7 @@ const actions = {
       throw error;
     }
   },
-  
+
   // 获取库存历史记录
   async fetchInventoryHistory({ commit }, itemId) {
     commit('SET_LOADING', true);

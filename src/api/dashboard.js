@@ -11,7 +11,7 @@ export function getDashboardStatistics(params) {
   return request({
     url: '/dashboard/statistics',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -27,7 +27,7 @@ export function getSalesTrend(params) {
   return request({
     url: '/dashboard/sales-trend',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -43,7 +43,7 @@ export function getHotProducts(params) {
   return request({
     url: '/dashboard/hot-products',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -54,7 +54,7 @@ export function getHotProducts(params) {
 export function getUserRegionDistribution() {
   return request({
     url: '/dashboard/user-region',
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -65,7 +65,7 @@ export function getUserRegionDistribution() {
 export function getLowStockProducts() {
   return request({
     url: '/dashboard/low-stock',
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -79,7 +79,7 @@ export function getRecentOrders(params) {
   return request({
     url: '/dashboard/recent-orders',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -95,7 +95,7 @@ export function getTopCategories(params) {
   return request({
     url: '/dashboard/top-categories',
     method: 'get',
-    params
+    params,
   });
 }
 
@@ -111,6 +111,6 @@ export function getUserGrowth(params) {
   return request({
     url: '/dashboard/user-growth',
     method: 'get',
-    params
+    params,
   });
 }

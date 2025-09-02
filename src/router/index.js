@@ -165,29 +165,29 @@ export const constantRoutes = [
     children: [
       {
         path: '/redirect/:path(.*)',
-        component: Redirect
-      }
-    ]
+        component: Redirect,
+      },
+    ],
   },
   {
     path: '/401',
     component: Page401,
-    hidden: true
+    hidden: true,
   },
   {
     path: '/404',
     component: Page404,
-    hidden: true
+    hidden: true,
   },
   {
     path: '*',
     redirect: '/404',
-    hidden: true
-  }
+    hidden: true,
+  },
 ];
 
 /* 异步路由 - 根据用户角色动态加载 */
-export const asyncRoutes = [  
+export const asyncRoutes = [
   // 个人中心
   {
     path: '/profile',
@@ -198,16 +198,16 @@ export const asyncRoutes = [
         path: 'index',
         component: Profile,
         name: 'Profile',
-        meta: { title: '个人中心', icon: 'el-icon-user' }
-      }
-    ]
-  }
+        meta: { title: '个人中心', icon: 'el-icon-user' },
+      },
+    ],
+  },
 ];
 
 const createRouter = () => new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes: constantRoutes
+  routes: constantRoutes,
 });
 
 const router = createRouter();
@@ -219,10 +219,10 @@ export function resetRouter() {
 }
 
 // 全局前置守卫
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // 获取token
   const hasToken = store.getters['auth/token'];
-  
+
   if (hasToken) {
     if (to.path === '/login') {
       // 如果已登录，重定向到首页
@@ -230,20 +230,20 @@ router.beforeEach(async(to, from, next) => {
     } else {
       // 确定用户是否已获取角色信息
       const hasRoles = store.getters['auth/roles'] && store.getters['auth/roles'].length > 0;
-      
+
       if (hasRoles) {
         next();
       } else {
         try {
           // 获取用户信息
           const { roles } = await store.dispatch('auth/getInfo');
-          
+
           // 根据角色生成可访问路由
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles);
-          
+
           // 动态添加可访问路由
           router.addRoutes(accessRoutes);
-          
+
           // 确保addRoutes完成
           next({ ...to, replace: true });
         } catch (error) {
