@@ -40,7 +40,7 @@
           name="password"
           tabindex="2"
           autocomplete="on"
-          @keyup.enter.native="handleLogin"
+          @keyup.enter="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
           <i :class="passwordType === 'password' ? 'el-icon-view' : 'el-icon-hide'"></i>

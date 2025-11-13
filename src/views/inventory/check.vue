@@ -19,7 +19,7 @@
             placeholder="盘点单号/操作人"
             style="width: 200px;"
             class="filter-item"
-            @keyup.enter.native="handleRecordsFilter"
+            @keyup.enter="handleRecordsFilter"
           />
           <el-select
             v-model="recordsQuery.status"
@@ -59,13 +59,13 @@
           highlight-current-row
         >
           <el-table-column label="盘点单号" align="center" width="180">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <span>{{ row.checkNo }}</span>
             </template>
           </el-table-column>
 
           <el-table-column label="盘点状态" width="120" align="center">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <el-tag :type="getStatusType(row.status)">
                 {{ getStatusName(row.status) }}
               </el-tag>
@@ -73,37 +73,37 @@
           </el-table-column>
 
           <el-table-column label="商品数量" width="100" align="center">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <span>{{ row.productCount }}</span>
             </template>
           </el-table-column>
 
           <el-table-column label="差异数量" width="100" align="center">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <span :class="row.diffCount > 0 ? 'text-warning' : ''">{{ row.diffCount }}</span>
             </template>
           </el-table-column>
 
           <el-table-column label="操作人" width="120" align="center">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <span>{{ row.operator }}</span>
             </template>
           </el-table-column>
 
           <el-table-column label="备注" min-width="150">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <span>{{ row.remark || '-' }}</span>
             </template>
           </el-table-column>
 
           <el-table-column label="创建时间" width="180" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.createdAt | parseTime }}</span>
+            <template #default="{ row }">
+              <span>{{ parseTime(row.createdAt) }}</span>
             </template>
           </el-table-column>
 
           <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <el-button type="primary" size="mini" @click="handleViewDetail(row)">
                 查看详情
               </el-button>
@@ -122,8 +122,8 @@
         <pagination
           v-show="recordsTotal > 0"
           :total="recordsTotal"
-          :page.sync="recordsQuery.page"
-          :limit.sync="recordsQuery.limit"
+          v-model:page="recordsQuery.page"
+          v-model:limit="recordsQuery.limit"
           @pagination="getRecords"
         />
       </el-tab-pane>
@@ -139,7 +139,7 @@
                 </el-tag>
               </span>
               <span>操作人: {{ currentCheck.operator }}</span>
-              <span>创建时间: {{ currentCheck.createdAt | parseTime }}</span>
+              <span>创建时间: {{ parseTime(currentCheck.createdAt) }}</span>
             </div>
             <div v-if="currentCheck.remark" class="check-remark">
               备注: {{ currentCheck.remark }}
@@ -156,7 +156,7 @@
             placeholder="商品名称/编码"
             style="width: 200px;"
             class="filter-item"
-            @keyup.enter.native="handleDetailFilter"
+            @keyup.enter="handleDetailFilter"
           />
           <el-select
             v-model="detailQuery.diffType"
@@ -182,7 +182,7 @@
           highlight-current-row
         >
           <el-table-column label="商品信息" min-width="200px">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <div class="product-info">
                 <el-image
                   v-if="row.product.image"
@@ -199,13 +199,13 @@
           </el-table-column>
 
           <el-table-column label="系统库存" width="100" align="center">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <span>{{ row.systemQuantity }}</span>
             </template>
           </el-table-column>
 
           <el-table-column label="实际库存" width="150" align="center">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <el-input-number
                 v-if="currentCheck && currentCheck.status === 'draft'"
                 v-model="row.actualQuantity"
@@ -219,7 +219,7 @@
           </el-table-column>
 
           <el-table-column label="差异" width="100" align="center">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <span :class="getDiffClass(row)">
                 {{ row.actualQuantity - row.systemQuantity }}
               </span>
@@ -227,7 +227,7 @@
           </el-table-column>
 
           <el-table-column label="备注" min-width="150">
-            <template slot-scope="{row}">
+            <template #default="{ row }">
               <el-input
                 v-if="currentCheck && currentCheck.status === 'draft'"
                 v-model="row.remark"
@@ -244,14 +244,14 @@
         <pagination
           v-show="detailTotal > 0"
           :total="detailTotal"
-          :page.sync="detailQuery.page"
-          :limit.sync="detailQuery.limit"
+          v-model:page="detailQuery.page"
+          v-model:limit="detailQuery.limit"
           @pagination="getDetails"
         />
       </el-tab-pane>
     </el-tabs>
 
-    <el-dialog title="新建盘点" :visible.sync="createDialogVisible">
+    <el-dialog title="新建盘点" v-model="createDialogVisible">
       <el-form
         ref="createForm"
         :model="createForm"
@@ -285,21 +285,21 @@
           <el-input v-model="createForm.remark" type="textarea" :rows="3" placeholder="备注信息" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="createDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="submitCreateCheck">确认</el-button>
-      </div>
+      </template>
     </el-dialog>
 
-    <el-dialog title="提交盘点确认" :visible.sync="submitDialogVisible">
+    <el-dialog title="提交盘点确认" v-model="submitDialogVisible">
       <div class="submit-confirm">
         <p>确认提交此次盘点结果吗？提交后将根据盘点结果自动调整库存。</p>
         <p class="warning">注意：提交后将无法修改盘点数据！</p>
       </div>
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="submitDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="confirmSubmitCheck">确认提交</el-button>
-      </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -318,11 +318,7 @@ import Pagination from '@/components/Pagination';
 export default {
   name: 'InventoryCheck',
   components: { Pagination },
-  filters: {
-    parseTime(time) {
-      return time ? new Date(time).toLocaleString() : '';
-    }
-  },
+  
   data() {
     return {
       activeTab: 'records',
@@ -394,6 +390,9 @@ export default {
     this.getRecords();
   },
   methods: {
+    parseTime(time) {
+      return time ? new Date(time).toLocaleString() : '';
+    },
     // 盘点记录相关方法
     getRecords() {
       this.recordsLoading = true;

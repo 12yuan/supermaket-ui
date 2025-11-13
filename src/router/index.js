@@ -1,8 +1,6 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import store from '../store';
-
-Vue.use(VueRouter);
+import ParentView from '@/components/ParentView.vue';
 
 // 路由懒加载
 const Login = () => import('../views/login/index.vue');
@@ -49,7 +47,7 @@ export const constantRoutes = [
       {
         path: 'product',
         name: 'Product',
-        component: { render: (h) => h('router-view') },
+        component: ParentView,
         meta: { title: '商品管理', icon: 'el-icon-goods' },
         children: [
           {
@@ -81,7 +79,7 @@ export const constantRoutes = [
       {
         path: 'inventory',
         name: 'Inventory',
-        component: { render: (h) => h('router-view') },
+        component: ParentView,
         meta: { title: '库存管理', icon: 'el-icon-s-shop' },
         children: [
           {
@@ -107,7 +105,7 @@ export const constantRoutes = [
       {
         path: 'user',
         name: 'User',
-        component: { render: (h) => h('router-view') },
+        component: ParentView,
         meta: { title: '用户管理', icon: 'el-icon-user', roles: ['admin'] },
         children: [
           {
@@ -145,7 +143,7 @@ export const constantRoutes = [
       {
         path: 'address',
         name: 'Address',
-        component: { render: (h) => h('router-view') },
+        component: ParentView,
         meta: { title: '地址管理', icon: 'el-icon-location' },
         children: [
           {
@@ -180,7 +178,7 @@ export const constantRoutes = [
     hidden: true,
   },
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     redirect: '/404',
     hidden: true,
   },
@@ -204,18 +202,26 @@ export const asyncRoutes = [
   },
 ];
 
-const createRouter = () => new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: constantRoutes,
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes: constantRoutes.map((route) => {
+    return route;
+  }),
 });
-
-const router = createRouter();
 
 // 重置路由
 export function resetRouter() {
-  const newRouter = createRouter();
-  router.matcher = newRouter.matcher;
+  const removeByName = (routes) => {
+    routes.forEach((r) => {
+      if (r.name) {
+        try {
+          router.removeRoute(r.name);
+        } catch (_) {}
+      }
+      if (r.children && r.children.length) removeByName(r.children);
+    });
+  };
+  removeByName(asyncRoutes);
 }
 
 // 全局前置守卫
@@ -240,11 +246,11 @@ router.beforeEach(async (to, from, next) => {
 
           // 根据角色生成可访问路由
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles);
-
-          // 动态添加可访问路由
-          router.addRoutes(accessRoutes);
-
-          // 确保addRoutes完成
+          accessRoutes.forEach((r) => {
+            const routeToAdd = { ...r };
+            routeToAdd.children = (routeToAdd.children || []).map((child) => ({ ...child }));
+            router.addRoute(routeToAdd);
+          });
           next({ ...to, replace: true });
         } catch (error) {
           // 移除token并跳转到登录页

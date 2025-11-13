@@ -6,7 +6,7 @@
         placeholder="请输入用户名/邮箱"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter="handleFilter"
       />
       <el-select v-model="listQuery.role" placeholder="用户角色" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value" />
@@ -28,77 +28,77 @@
       style="width: 100%;"
     >
       <el-table-column align="center" label="ID" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+        <template #default="{ row }">
+          <span>{{ row.id }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="100" align="center" label="头像">
-        <template slot-scope="scope">
-          <el-avatar :src="scope.row.avatar || defaultAvatar" :size="40"></el-avatar>
+        <template #default="{ row }">
+          <el-avatar :src="row.avatar || defaultAvatar" :size="40"></el-avatar>
         </template>
       </el-table-column>
       
       <el-table-column width="150" label="用户名">
-        <template slot-scope="scope">
-          <span>{{ scope.row.username }}</span>
+        <template #default="{ row }">
+          <span>{{ row.username }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="150" label="姓名">
-        <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+        <template #default="{ row }">
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="200" label="邮箱">
-        <template slot-scope="scope">
-          <span>{{ scope.row.email }}</span>
+        <template #default="{ row }">
+          <span>{{ row.email }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="120" align="center" label="角色">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.role === 'admin' ? 'danger' : 'primary'">
-            {{ scope.row.role === 'admin' ? '管理员' : '普通用户' }}
+        <template #default="{ row }">
+          <el-tag :type="row.role === 'admin' ? 'danger' : 'primary'">
+            {{ row.role === 'admin' ? '管理员' : '普通用户' }}
           </el-tag>
         </template>
       </el-table-column>
       
       <el-table-column width="100" align="center" label="状态">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status === 1 ? 'success' : 'info'">
-            {{ scope.row.status === 1 ? '启用' : '禁用' }}
+        <template #default="{ row }">
+          <el-tag :type="row.status === 1 ? 'success' : 'info'">
+            {{ row.status === 1 ? '启用' : '禁用' }}
           </el-tag>
         </template>
       </el-table-column>
       
       <el-table-column width="180" align="center" label="创建时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+        <template #default="{ row }">
+          <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="200" align="center" label="操作">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+        <template #default="{ row }">
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
           <el-button 
-            v-if="scope.row.status === 0" 
+            v-if="row.status === 0" 
             size="mini" 
             type="success" 
-            @click="handleModifyStatus(scope.row, 1)"
+            @click="handleModifyStatus(row, 1)"
           >启用</el-button>
           <el-button 
             v-else 
             size="mini" 
             type="info" 
-            @click="handleModifyStatus(scope.row, 0)"
+            @click="handleModifyStatus(row, 0)"
           >禁用</el-button>
           <el-button 
-            v-if="scope.row.id !== currentUserId" 
+            v-if="row.id !== currentUserId" 
             size="mini" 
             type="danger" 
-            @click="handleDelete(scope.row)"
+            @click="handleDelete(row)"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -107,13 +107,13 @@
     <pagination
       v-show="total > 0"
       :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
+      v-model:page="listQuery.page"
+      v-model:limit="listQuery.limit"
       @pagination="getList"
     />
 
     <!-- 添加或修改用户对话框 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" v-model="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -174,10 +174,10 @@
         </el-form-item>
       </el-form>
       
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">确认</el-button>
-      </div>
+      </template>
     </el-dialog>
   </div>
 </template>

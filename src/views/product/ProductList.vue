@@ -6,7 +6,7 @@
         placeholder="商品名称/编码"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter="handleFilter"
       />
       <el-select
         v-model="listQuery.categoryId"
@@ -78,54 +78,54 @@
       style="width: 100%"
     >
       <el-table-column label="ID" align="center" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+        <template #default="{ row }">
+          <span>{{ row.id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="商品图片" width="110" align="center">
-        <template slot-scope="scope">
+        <template #default="{ row }">
           <el-image
-            :src="scope.row.image"
-            :preview-src-list="[scope.row.image]"
+            :src="row.image"
+            :preview-src-list="[row.image]"
             style="width: 60px; height: 60px"
           />
         </template>
       </el-table-column>
       <el-table-column label="商品名称" min-width="150px">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
           <el-tag v-if="row.isNew" size="small">新品</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="商品编码" align="center" width="120">
-        <template slot-scope="scope">
-          <span>{{ scope.row.code }}</span>
+        <template #default="{ row }">
+          <span>{{ row.code }}</span>
         </template>
       </el-table-column>
       <el-table-column label="分类" width="120" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.categoryName }}</span>
+        <template #default="{ row }">
+          <span>{{ row.categoryName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="价格" width="120" align="center">
-        <template slot-scope="scope">
-          <span>¥{{ scope.row.price }}</span>
+        <template #default="{ row }">
+          <span>¥{{ row.price }}</span>
         </template>
       </el-table-column>
       <el-table-column label="库存" width="100" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.stock }}</span>
+        <template #default="{ row }">
+          <span>{{ row.stock }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" class-name="status-col" width="100">
-        <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
+        <template #default="{ row }">
+          <el-tag :type="statusTag(row.status)">
             {{ row.status === 1 ? '上架' : '下架' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
@@ -162,8 +162,8 @@
     <pagination
       v-show="total > 0"
       :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
+      v-model:page="listQuery.page"
+      v-model:limit="listQuery.limit"
       @pagination="getList"
     />
   </div>
@@ -179,15 +179,6 @@ export default {
   name: 'ProductList',
   components: { Pagination },
   directives: { waves, permission },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        1: 'success',
-        0: 'info'
-      };
-      return statusMap[status];
-    }
-  },
   data() {
     return {
       list: null,
@@ -213,6 +204,10 @@ export default {
     this.getCategoryOptions();
   },
   methods: {
+    statusTag(status) {
+      const statusMap = { 1: 'success', 0: 'info' };
+      return statusMap[status];
+    },
     getList() {
       this.listLoading = true;
       getProducts(this.listQuery).then(response => {

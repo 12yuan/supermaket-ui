@@ -6,7 +6,7 @@
         placeholder="请输入商品名称"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter="handleFilter"
       />
       <el-select v-model="listQuery.categoryId" placeholder="商品分类" clearable class="filter-item" style="width: 160px">
         <el-option v-for="item in categoryOptions" :key="item.value" :label="item.label" :value="item.value" />
@@ -28,76 +28,76 @@
       style="width: 100%;"
     >
       <el-table-column align="center" label="ID" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+        <template #default="{ row }">
+          <span>{{ row.id }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="120" align="center" label="商品图片">
-        <template slot-scope="scope">
+        <template #default="{ row }">
           <el-image 
             style="width: 60px; height: 60px" 
-            :src="scope.row.image" 
+            :src="row.image" 
             fit="cover"
-            :preview-src-list="[scope.row.image]"
+            :preview-src-list="[row.image]"
           ></el-image>
         </template>
       </el-table-column>
       
       <el-table-column min-width="200" label="商品名称">
-        <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+        <template #default="{ row }">
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="120" align="center" label="分类">
-        <template slot-scope="scope">
-          <span>{{ scope.row.categoryName }}</span>
+        <template #default="{ row }">
+          <span>{{ row.categoryName }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="120" align="center" label="价格">
-        <template slot-scope="scope">
-          <span>¥{{ scope.row.price }}</span>
+        <template #default="{ row }">
+          <span>¥{{ row.price }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="100" align="center" label="库存">
-        <template slot-scope="scope">
-          <span>{{ scope.row.stock }}</span>
+        <template #default="{ row }">
+          <span>{{ row.stock }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="100" align="center" label="状态">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status === 1 ? 'success' : 'info'">
-            {{ scope.row.status === 1 ? '上架' : '下架' }}
+        <template #default="{ row }">
+          <el-tag :type="row.status === 1 ? 'success' : 'info'">
+            {{ row.status === 1 ? '上架' : '下架' }}
           </el-tag>
         </template>
       </el-table-column>
       
       <el-table-column width="180" align="center" label="创建时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+        <template #default="{ row }">
+          <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="200" align="center" label="操作">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+        <template #default="{ row }">
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
           <el-button 
-            v-if="scope.row.status === 0" 
+            v-if="row.status === 0" 
             size="mini" 
             type="success" 
-            @click="handleModifyStatus(scope.row, 1)"
+            @click="handleModifyStatus(row, 1)"
           >上架</el-button>
           <el-button 
             v-else 
             size="mini" 
             type="info" 
-            @click="handleModifyStatus(scope.row, 0)"
+            @click="handleModifyStatus(row, 0)"
           >下架</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -105,13 +105,13 @@
     <pagination
       v-show="total > 0"
       :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
+      v-model:page="listQuery.page"
+      v-model:limit="listQuery.limit"
       @pagination="getList"
     />
 
     <!-- 添加或修改商品对话框 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" v-model="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -163,10 +163,10 @@
         </el-form-item>
       </el-form>
       
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">确认</el-button>
-      </div>
+      </template>
     </el-dialog>
   </div>
 </template>

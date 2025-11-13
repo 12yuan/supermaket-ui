@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Message, MessageBox } from 'element-ui';
+import { ElMessage as Message, ElMessageBox as MessageBox } from 'element-plus';
 import store from '@/store';
 import router from '@/router';
 
@@ -13,9 +13,9 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么
-    if (store.getters.token) {
+    if (store.getters['auth/token']) {
       // 让每个请求携带token
-      config.headers.Authorization = `Bearer ${store.getters.token}`;
+      config.headers.Authorization = `Bearer ${store.getters['auth/token']}`;
     }
     return config;
   },

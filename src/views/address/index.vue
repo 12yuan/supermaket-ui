@@ -6,7 +6,7 @@
         placeholder="请输入收货人/地址"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter="handleFilter"
       />
       <el-select v-model="listQuery.province" placeholder="省份" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in provinceOptions" :key="item" :label="item" :value="item" />
@@ -25,53 +25,53 @@
       style="width: 100%;"
     >
       <el-table-column align="center" label="ID" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+        <template #default="{ row }">
+          <span>{{ row.id }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="120" label="收货人">
-        <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+        <template #default="{ row }">
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="150" label="联系电话">
-        <template slot-scope="scope">
-          <span>{{ scope.row.phone }}</span>
+        <template #default="{ row }">
+          <span>{{ row.phone }}</span>
         </template>
       </el-table-column>
       
       <el-table-column min-width="300" label="详细地址">
-        <template slot-scope="scope">
-          <span>{{ scope.row.province + scope.row.city + scope.row.district + scope.row.address }}</span>
+        <template #default="{ row }">
+          <span>{{ row.province + row.city + row.district + row.address }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="100" align="center" label="默认地址">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.isDefault ? 'success' : 'info'">
-            {{ scope.row.isDefault ? '是' : '否' }}
+        <template #default="{ row }">
+          <el-tag :type="row.isDefault ? 'success' : 'info'">
+            {{ row.isDefault ? '是' : '否' }}
           </el-tag>
         </template>
       </el-table-column>
       
       <el-table-column width="180" align="center" label="创建时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+        <template #default="{ row }">
+          <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="200" align="center" label="操作">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+        <template #default="{ row }">
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
           <el-button 
-            v-if="!scope.row.isDefault" 
+            v-if="!row.isDefault" 
             size="mini" 
             type="success" 
-            @click="handleSetDefault(scope.row)"
+            @click="handleSetDefault(row)"
           >设为默认</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -79,13 +79,13 @@
     <pagination
       v-show="total > 0"
       :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
+      v-model:page="listQuery.page"
+      v-model:limit="listQuery.limit"
       @pagination="getList"
     />
 
     <!-- 添加或修改地址对话框 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" v-model="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -141,10 +141,10 @@
         </el-form-item>
       </el-form>
       
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">确认</el-button>
-      </div>
+      </template>
     </el-dialog>
   </div>
 </template>

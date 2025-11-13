@@ -89,10 +89,10 @@ module.exports = {
                   priority: 10,
                   chunks: 'initial',
                 },
-                elementUI: {
-                  name: 'chunk-elementUI',
+                elementPlus: {
+                  name: 'chunk-elementPlus',
                   priority: 20,
-                  test: /[\\/]node_modules[\\/]_?element-ui(.*)/,
+                  test: /[\\/]node_modules[\\/]_?element-plus(.*)/,
                 },
                 commons: {
                   name: 'chunk-commons',

@@ -6,7 +6,7 @@
         placeholder="商品名称/编码"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter="handleFilter"
       />
       <el-select
         v-model="listQuery.type"
@@ -49,13 +49,13 @@
       highlight-current-row
     >
       <el-table-column label="ID" align="center" width="80">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="商品信息" min-width="200px">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <div class="product-info">
             <el-image
               v-if="row.product.image"
@@ -72,7 +72,7 @@
       </el-table-column>
 
       <el-table-column label="变更类型" width="120" align="center">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <el-tag :type="getTypeTag(row.type)">
             {{ getTypeName(row.type) }}
           </el-tag>
@@ -80,19 +80,19 @@
       </el-table-column>
 
       <el-table-column label="变更前数量" width="120" align="center">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.beforeQuantity }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="变更后数量" width="120" align="center">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.afterQuantity }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="变更数量" width="120" align="center">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span :class="row.changeQuantity > 0 ? 'text-success' : 'text-danger'">
             {{ row.changeQuantity > 0 ? '+' : '' }}{{ row.changeQuantity }}
           </span>
@@ -100,20 +100,20 @@
       </el-table-column>
 
       <el-table-column label="操作人" width="120" align="center">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.operator }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="备注" min-width="150">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.remark || '-' }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="操作时间" width="180" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.createdAt | parseTime }}</span>
+        <template #default="{ row }">
+          <span>{{ parseTime(row.createdAt) }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -121,8 +121,8 @@
     <pagination
       v-show="total > 0"
       :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
+      v-model:page="listQuery.page"
+      v-model:limit="listQuery.limit"
       @pagination="getList"
     />
   </div>
@@ -135,11 +135,6 @@ import Pagination from '@/components/Pagination';
 export default {
   name: 'InventoryHistory',
   components: { Pagination },
-  filters: {
-    parseTime(time) {
-      return time ? new Date(time).toLocaleString() : '';
-    }
-  },
   data() {
     return {
       list: [],
@@ -178,6 +173,9 @@ export default {
     this.getList();
   },
   methods: {
+    parseTime(time) {
+      return time ? new Date(time).toLocaleString() : '';
+    },
     getList() {
       this.listLoading = true;
       getInventoryHistory(this.listQuery).then(response => {

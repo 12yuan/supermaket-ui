@@ -182,6 +182,8 @@ const getters = {
   userRole: (state) => (state.user ? state.user.role : null),
   isAdmin: (state) => (state.user && state.user.role === 'admin'),
   token: (state) => state.token,
+  roles: (state) => (state.user && state.user.role ? [state.user.role] : []),
+  permissions: (state) => (state.user && Array.isArray(state.user.permissions) ? state.user.permissions : []),
 };
 
 export default {

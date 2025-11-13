@@ -5,7 +5,7 @@ import store from '@/store';
  * 用法：v-role="'admin'" 或 v-role="['admin', 'editor']"
  */
 export default {
-  inserted(el, binding) {
+  mounted(el, binding) {
     const { value } = binding;
     const roles = store.getters && store.getters['auth/roles'];
 

@@ -5,7 +5,7 @@ import store from '@/store';
  * 用法：v-permission="'user:add'" 或 v-permission="['user:add', 'user:edit']"
  */
 export default {
-  inserted(el, binding) {
+  mounted(el, binding) {
     const { value } = binding;
     const permissions = store.getters && store.getters['auth/permissions'];
 

@@ -4,7 +4,7 @@
       placement="bottom"
       width="500"
       trigger="click"
-      v-model="popoverVisible"
+      v-model:visible="popoverVisible"
     >
       <div class="address-list-container">
         <div class="address-list-header">
@@ -63,7 +63,7 @@
     </el-popover>
     
     <!-- 添加/编辑地址对话框 -->
-    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="50%">
+    <el-dialog :title="dialogTitle" v-model="dialogVisible" width="50%">
       <el-form
         ref="addressForm"
         :model="addressForm"
@@ -117,10 +117,10 @@
         </el-form-item>
       </el-form>
       
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="submitAddressForm">确认</el-button>
-      </div>
+      </template>
     </el-dialog>
   </div>
 </template>

@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import auth from './modules/auth';
 import product from './modules/product';
@@ -8,8 +7,6 @@ import user from './modules/user';
 import tagsView from './modules/tagsView';
 import settings from './modules/settings';
 import permission from './modules/permission';
-
-Vue.use(Vuex);
 
 // 配置Vuex持久化
 const vuexLocal = new VuexPersistence({
@@ -21,7 +18,7 @@ const vuexLocal = new VuexPersistence({
   }),
 });
 
-export default new Vuex.Store({
+const store = createStore({
   state: {
     loading: false,
     error: null,
@@ -59,3 +56,5 @@ export default new Vuex.Store({
   },
   plugins: [vuexLocal.plugin],
 });
+
+export default store;

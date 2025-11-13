@@ -85,13 +85,13 @@
             <el-table-column prop="date" label="下单时间" width="180"></el-table-column>
             <el-table-column prop="amount" label="订单金额" width="120"></el-table-column>
             <el-table-column prop="status" label="订单状态">
-              <template slot-scope="scope">
-                <el-tag :type="orderStatusType(scope.row.status)">{{ scope.row.status }}</el-tag>
+              <template #default="{ row }">
+                <el-tag :type="orderStatusType(row.status)">{{ row.status }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="操作" width="120">
-              <template slot-scope="scope">
-                <el-button type="text" size="small" @click="viewOrderDetail(scope.row.id)">查看详情</el-button>
+              <template #default="{ row }">
+                <el-button type="text" size="small" @click="viewOrderDetail(row.id)">查看详情</el-button>
               </template>
             </el-table-column>
           </el-table>

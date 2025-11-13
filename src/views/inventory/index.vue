@@ -6,7 +6,7 @@
         placeholder="请输入商品名称"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter="handleFilter"
       />
       <el-select v-model="listQuery.categoryId" placeholder="商品分类" clearable class="filter-item" style="width: 160px">
         <el-option v-for="item in categoryOptions" :key="item.value" :label="item.label" :value="item.value" />
@@ -28,60 +28,60 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column align="center" label="ID" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column align="center" label="ID" width="80">
+          <template #default="{ row }">
+            <span>{{ row.id }}</span>
+          </template>
+        </el-table-column>
       
       <el-table-column width="120" align="center" label="商品图片">
-        <template slot-scope="scope">
+        <template #default="{ row }">
           <el-image 
             style="width: 60px; height: 60px" 
-            :src="scope.row.image" 
+            :src="row.image" 
             fit="cover"
-            :preview-src-list="[scope.row.image]"
+            :preview-src-list="[row.image]"
           ></el-image>
         </template>
       </el-table-column>
       
       <el-table-column min-width="200" label="商品名称">
-        <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+        <template #default="{ row }">
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="120" align="center" label="分类">
-        <template slot-scope="scope">
-          <span>{{ scope.row.categoryName }}</span>
+        <template #default="{ row }">
+          <span>{{ row.categoryName }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="100" align="center" label="库存">
-        <template slot-scope="scope">
-          <span :class="{ 'stock-warning': scope.row.stock <= scope.row.stockThreshold }">
-            {{ scope.row.stock }}
+        <template #default="{ row }">
+          <span :class="{ 'stock-warning': row.stock <= row.stockThreshold }">
+            {{ row.stock }}
           </span>
         </template>
       </el-table-column>
       
       <el-table-column width="100" align="center" label="预警值">
-        <template slot-scope="scope">
-          <span>{{ scope.row.stockThreshold }}</span>
+        <template #default="{ row }">
+          <span>{{ row.stockThreshold }}</span>
         </template>
       </el-table-column>
       
       <el-table-column width="100" align="center" label="状态">
-        <template slot-scope="scope">
-          <el-tag :type="getStockStatusType(scope.row.stock, scope.row.stockThreshold)">
-            {{ getStockStatusText(scope.row.stock, scope.row.stockThreshold) }}
+        <template #default="{ row }">
+          <el-tag :type="getStockStatusType(row.stock, row.stockThreshold)">
+            {{ getStockStatusText(row.stock, row.stockThreshold) }}
           </el-tag>
         </template>
       </el-table-column>
       
       <el-table-column width="180" align="center" label="最后更新时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.updateTime }}</span>
+        <template #default="{ row }">
+          <span>{{ row.updateTime }}</span>
         </template>
       </el-table-column>
       
@@ -96,13 +96,13 @@
     <pagination
       v-show="total > 0"
       :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
+      v-model:page="listQuery.page"
+      v-model:limit="listQuery.limit"
       @pagination="getList"
     />
 
     <!-- 修改库存对话框 -->
-    <el-dialog title="修改库存" :visible.sync="dialogFormVisible">
+    <el-dialog title="修改库存" v-model="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -142,7 +142,7 @@
     </el-dialog>
 
     <!-- 批量入库对话框 -->
-    <el-dialog title="批量入库" :visible.sync="batchDialogVisible">
+    <el-dialog title="批量入库" v-model="batchDialogVisible">
       <el-form
         ref="batchForm"
         :rules="batchRules"
@@ -173,14 +173,14 @@
         </el-form-item>
       </el-form>
       
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="batchDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="confirmBatchImport">确认导入</el-button>
-      </div>
+      </template>
     </el-dialog>
 
     <!-- 库存记录对话框 -->
-    <el-dialog title="库存变更记录" :visible.sync="historyDialogVisible" width="70%">
+    <el-dialog title="库存变更记录" v-model="historyDialogVisible" width="70%">
       <el-table
         v-loading="historyLoading"
         :data="historyList"
@@ -190,58 +190,58 @@
         style="width: 100%;"
       >
         <el-table-column align="center" label="ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
+          <template #default="{ row }">
+            <span>{{ row.id }}</span>
           </template>
         </el-table-column>
         
         <el-table-column width="120" align="center" label="商品名称">
-          <template slot-scope="scope">
-            <span>{{ scope.row.productName }}</span>
+          <template #default="{ row }">
+            <span>{{ row.productName }}</span>
           </template>
         </el-table-column>
         
         <el-table-column width="100" align="center" label="操作类型">
-          <template slot-scope="scope">
-            <el-tag :type="scope.row.operationType === 'in' ? 'success' : 'danger'">
-              {{ scope.row.operationType === 'in' ? '入库' : '出库' }}
+          <template #default="{ row }">
+            <el-tag :type="row.operationType === 'in' ? 'success' : 'danger'">
+              {{ row.operationType === 'in' ? '入库' : '出库' }}
             </el-tag>
           </template>
         </el-table-column>
         
         <el-table-column width="100" align="center" label="变更数量">
-          <template slot-scope="scope">
-            <span>{{ scope.row.quantity }}</span>
+          <template #default="{ row }">
+            <span>{{ row.quantity }}</span>
           </template>
         </el-table-column>
         
         <el-table-column width="100" align="center" label="变更前库存">
-          <template slot-scope="scope">
-            <span>{{ scope.row.beforeStock }}</span>
+          <template #default="{ row }">
+            <span>{{ row.beforeStock }}</span>
           </template>
         </el-table-column>
         
         <el-table-column width="100" align="center" label="变更后库存">
-          <template slot-scope="scope">
-            <span>{{ scope.row.afterStock }}</span>
+          <template #default="{ row }">
+            <span>{{ row.afterStock }}</span>
           </template>
         </el-table-column>
         
         <el-table-column min-width="150" label="备注">
-          <template slot-scope="scope">
-            <span>{{ scope.row.remark }}</span>
+          <template #default="{ row }">
+            <span>{{ row.remark }}</span>
           </template>
         </el-table-column>
         
         <el-table-column width="120" align="center" label="操作人">
-          <template slot-scope="scope">
-            <span>{{ scope.row.operatorName }}</span>
+          <template #default="{ row }">
+            <span>{{ row.operatorName }}</span>
           </template>
         </el-table-column>
         
         <el-table-column width="180" align="center" label="操作时间">
-          <template slot-scope="scope">
-            <span>{{ scope.row.createTime }}</span>
+          <template #default="{ row }">
+            <span>{{ row.createTime }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -249,8 +249,8 @@
       <pagination
         v-show="historyTotal > 0"
         :total="historyTotal"
-        :page.sync="historyQuery.page"
-        :limit.sync="historyQuery.limit"
+        v-model:page="historyQuery.page"
+        v-model:limit="historyQuery.limit"
         @pagination="getHistoryList"
       />
     </el-dialog>

@@ -6,7 +6,7 @@
         placeholder="权限名称/标识"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter="handleFilter"
       />
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
@@ -33,25 +33,25 @@
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
       <el-table-column label="ID" align="center" width="80">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="权限名称" min-width="120px">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="权限标识" min-width="120px">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <el-tag>{{ row.code }}</el-tag>
         </template>
       </el-table-column>
 
       <el-table-column label="类型" width="100" align="center">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <el-tag :type="row.type === 'menu' ? 'primary' : row.type === 'button' ? 'success' : 'info'">
             {{ row.type === 'menu' ? '菜单' : row.type === 'button' ? '按钮' : '接口' }}
           </el-tag>
@@ -59,26 +59,26 @@
       </el-table-column>
 
       <el-table-column label="路径" min-width="150px">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.path || '-' }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="图标" width="80" align="center">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <i v-if="row.icon" :class="row.icon"></i>
           <span v-else>-</span>
         </template>
       </el-table-column>
 
       <el-table-column label="排序" width="80" align="center">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.sort }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
@@ -92,7 +92,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" v-model="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -130,14 +130,14 @@
           <el-input-number v-model="temp.sort" :min="0" :max="999" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
         <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">
           确认
         </el-button>
-      </div>
+      </template>
     </el-dialog>
   </div>
 </template>

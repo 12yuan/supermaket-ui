@@ -6,7 +6,7 @@
         placeholder="角色名称/标识"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter="handleFilter"
       />
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
@@ -31,37 +31,37 @@
       highlight-current-row
     >
       <el-table-column label="ID" align="center" width="80">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="角色名称" min-width="120px">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="角色标识" min-width="120px">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <el-tag>{{ row.code }}</el-tag>
         </template>
       </el-table-column>
 
       <el-table-column label="描述" min-width="200px">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <span>{{ row.description || '-' }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="创建时间" width="180" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.createdAt | parseTime }}</span>
+        <template #default="{ row }">
+          <span>{{ parseTime(row.createdAt) }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
+        <template #default="{ row }">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
@@ -78,12 +78,12 @@
     <pagination
       v-show="total > 0"
       :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
+      v-model:page="listQuery.page"
+      v-model:limit="listQuery.limit"
       @pagination="getList"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" v-model="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -102,17 +102,17 @@
           <el-input v-model="temp.description" type="textarea" :rows="2" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
         <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">
           确认
         </el-button>
-      </div>
+      </template>
     </el-dialog>
 
-    <el-dialog title="权限设置" :visible.sync="permissionDialogVisible" width="600px">
+    <el-dialog title="权限设置" v-model="permissionDialogVisible" width="600px">
       <div v-if="currentRole" class="permission-container">
         <div class="role-info">
           <h3>{{ currentRole.name }}</h3>
@@ -129,14 +129,14 @@
           :check-strictly="false"
         />
       </div>
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="permissionDialogVisible = false">
           取消
         </el-button>
         <el-button type="primary" @click="updatePermissions">
           保存
         </el-button>
-      </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -149,11 +149,6 @@ import Pagination from '@/components/Pagination';
 export default {
   name: 'Role',
   components: { Pagination },
-  filters: {
-    parseTime(time) {
-      return time ? new Date(time).toLocaleString() : '';
-    }
-  },
   data() {
     return {
       list: [],
@@ -195,6 +190,9 @@ export default {
     this.getList();
   },
   methods: {
+    parseTime(time) {
+      return time ? new Date(time).toLocaleString() : '';
+    },
     getList() {
       this.listLoading = true;
       getRoles(this.listQuery).then(response => {
